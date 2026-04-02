@@ -1,0 +1,21 @@
+{
+  "name": "Arslan Training Tracker Pro",
+  "short_name": "Arslan Tracker",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d0f14",
+  "theme_color": "#0d0f14",
+  "description": "Tracking de entreno, rutina, progresión y reporte semanal en móvil.",
+  "icons": [
+    {
+      "src": "./apple-touch-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "./favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}
