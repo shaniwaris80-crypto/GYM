@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d0f14" />
+  <title>ARSLAN TRAINING TRACKER PRO</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <div class="brand-badge">AT</div>
+        <div>
+          <p class="eyebrow">MOBILE FIRST · FIRESTORE READY</p>
+          <h1>Arslan Training Tracker Pro</h1>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeToggleBtn" aria-label="Cambiar tema">◐</button>
+    </header>
+
+    <main class="main-shell">
+      <section class="view active" id="view-home">
+        <div class="hero-card">
+          <div>
+            <p class="eyebrow">TRACKING COMPLETO</p>
+            <h2 id="homeGreeting">Listo para entrenar</h2>
+            <p class="muted" id="homeProgramSummary">Sin rutina activa.</p>
+          </div>
+          <div class="hero-actions mobile-stack">
+            <button class="btn btn-primary" id="startNextWorkoutBtn">Empezar siguiente</button>
+            <button class="btn btn-secondary" id="openImportProgramBtn">Cargar rutina nueva</button>
+          </div>
+        </div>
+
+        <div class="grid stats-grid">
+          <article class="card stat-card">
+            <span class="label">Rutina activa</span>
+            <strong id="activeProgramName">—</strong>
+            <small id="activeProgramMeta">Sin bloque activo</small>
+          </article>
+          <article class="card stat-card">
+            <span class="label">Siguiente</span>
+            <strong id="nextDayLabel">—</strong>
+            <small id="nextDaySub">—</small>
+          </article>
+          <article class="card stat-card">
+            <span class="label">Semana del bloque</span>
+            <strong id="currentBlockWeek">1</strong>
+            <small id="currentBlockStart">—</small>
+          </article>
+          <article class="card stat-card">
+            <span class="label">Último peso</span>
+            <strong id="latestWeightStat">—</strong>
+            <small id="latestWeightSub">Sin registro</small>
+          </article>
+        </div>
+
+        <div class="grid two-col">
+          <article class="card">
+            <div class="section-head compact">
+              <div>
+                <p class="eyebrow">HOY</p>
+                <h3>Estado rápido</h3>
+              </div>
+              <span class="badge" id="syncBadge">DEMO</span>
+            </div>
+            <div class="mini-grid">
+              <div>
+                <span class="label">Sesión activa</span>
+                <strong id="homeActiveWorkout">No iniciada</strong>
+              </div>
+              <div>
+                <span class="label">Series hechas</span>
+                <strong id="homeSetsDone">0</strong>
+              </div>
+              <div>
+                <span class="label">Volumen sesión</span>
+                <strong id="homeVolume">0 kg</strong>
+              </div>
+              <div>
+                <span class="label">Descanso</span>
+                <strong id="homeTimerState">Listo</strong>
+              </div>
+            </div>
+            <div class="quick-actions">
+              <button class="pill-btn" id="quickCoreBtn">Añadir core</button>
+              <button class="pill-btn" id="quickCalvesBtn">Añadir gemelos</button>
+              <button class="pill-btn" id="quickReportBtn">Reporte semanal</button>
+              <button class="pill-btn" id="quickWeightBtn">Registrar peso</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="section-head compact">
+              <div>
+                <p class="eyebrow">SEMANA</p>
+                <h3>Control semanal</h3>
+              </div>
+            </div>
+            <div class="mini-grid">
+              <div>
+                <span class="label">Entrenos</span>
+                <strong id="weeklyTrainingCount">0</strong>
+              </div>
+              <div>
+                <span class="label">Core</span>
+                <strong id="weeklyCoreCount">0 / 2</strong>
+              </div>
+              <div>
+                <span class="label">Gemelos</span>
+                <strong id="weeklyCalvesCount">0 / 2</strong>
+              </div>
+              <div>
+                <span class="label">Reportes</span>
+                <strong id="weeklyReportCount">0</strong>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="mini-grid">
+              <div>
+                <span class="label">Último reporte</span>
+                <strong id="latestReportLabel">—</strong>
+              </div>
+              <div>
+                <span class="label">Diferencia</span>
+                <strong id="latestReportDelta">—</strong>
+              </div>
+              <div>
+                <span class="label">Sueño</span>
+                <strong id="latestReportSleep">—</strong>
+              </div>
+              <div>
+                <span class="label">Cardio</span>
+                <strong id="latestReportCardio">—</strong>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="grid two-col">
+          <article class="card">
+            <div class="section-head compact">
+              <div>
+                <p class="eyebrow">ÚLTIMAS</p>
+                <h3>Sesiones recientes</h3>
+              </div>
+              <span class="badge" id="recentSessionsBadge">0</span>
+            </div>
+            <div id="recentSessionsList" class="stack empty">Aún no hay sesiones guardadas.</div>
+          </article>
+
+          <article class="card">
+            <div class="section-head compact">
+              <div>
+                <p class="eyebrow">TIMER</p>
+                <h3>Descanso</h3>
+              </div>
+              <span class="badge" id="timerStatusBadge">LISTO</span>
+            </div>
+            <div class="timer-display" id="timerDisplay">01:00</div>
+            <div class="timer-actions">
+              <button class="btn btn-secondary" id="timerMinusBtn">-15 s</button>
+              <button class="btn btn-secondary" id="timerPlusBtn">+15 s</button>
+              <button class="btn btn-primary" id="timerToggleBtn">Iniciar</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-workout">
+        <div class="card sticky-card">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">ENTRENO ACTIVO</p>
+              <h2 id="workoutHeading">Ninguna sesión iniciada</h2>
+              <p class="muted" id="workoutSubheading">Inicia el siguiente día o elige uno desde Rutinas.</p>
+            </div>
+            <div class="hero-actions mobile-stack">
+              <button class="btn btn-secondary" id="copySimilarWorkoutBtn">Copiar última similar</button>
+              <button class="btn btn-primary" id="saveWorkoutBtn">Guardar sesión</button>
+            </div>
+          </div>
+          <div class="summary-bar">
+            <div><span class="label">Series</span><strong id="workoutSetsSummary">0</strong></div>
+            <div><span class="label">Volumen</span><strong id="workoutVolumeSummary">0 kg</strong></div>
+            <div><span class="label">Ejercicios</span><strong id="workoutExerciseSummary">0</strong></div>
+          </div>
+          <div class="toggle-group">
+            <label class="switch">
+              <input type="checkbox" id="includeCoreToggle" />
+              <span>Incluir core</span>
+            </label>
+            <label class="switch">
+              <input type="checkbox" id="includeCalvesToggle" />
+              <span>Incluir gemelos</span>
+            </label>
+          </div>
+          <label class="field full">
+            <span>Notas del entreno</span>
+            <textarea id="workoutNotes" rows="3" placeholder="Sensaciones, molestias, técnica, energía..."></textarea>
+          </label>
+        </div>
+        <div id="workoutExercisesList" class="stack empty">Empieza una sesión para ver los ejercicios.</div>
+      </section>
+
+      <section class="view" id="view-programs">
+        <div class="grid two-col">
+          <article class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">RUTINAS</p>
+                <h2>Bloques y versiones</h2>
+                <p class="muted">Activa, archiva, duplica e importa rutinas nuevas sin perder el histórico.</p>
+              </div>
+              <button class="btn btn-secondary" id="createFromActiveBtn">Duplicar activa</button>
+            </div>
+            <div id="programList" class="stack empty">No hay rutinas todavía.</div>
+          </article>
+
+          <article class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">IMPORTADOR</p>
+                <h2>Cargar rutina nueva</h2>
+                <p class="muted">Pega el texto, sube TXT/DOCX/JSON y revisa la vista previa antes de guardar.</p>
+              </div>
+            </div>
+            <div class="grid compact-grid">
+              <label class="field">
+                <span>Nombre del bloque</span>
+                <input type="text" id="importProgramName" placeholder="Rutina abril 2026" />
+              </label>
+              <label class="field">
+                <span>Fecha inicio</span>
+                <input type="date" id="importProgramStartDate" />
+              </label>
+            </div>
+            <label class="field full">
+              <span>Objetivo del bloque</span>
+              <input type="text" id="importProgramGoal" placeholder="Definición · recomposición · fuerza..." />
+            </label>
+            <div class="toggle-group spaced">
+              <label class="switch">
+                <input type="checkbox" id="carryHistoryToggle" checked />
+                <span>Arrastrar pesos y pausas previas</span>
+              </label>
+              <label class="switch">
+                <input type="checkbox" id="activateImportedToggle" checked />
+                <span>Activar al guardar</span>
+              </label>
+            </div>
+            <label class="field full">
+              <span>Texto de la rutina</span>
+              <textarea id="programImportText" rows="14" placeholder="Pega aquí tu rutina en el mismo formato del preparador..."></textarea>
+            </label>
+            <div class="hero-actions mobile-stack">
+              <input class="input-file" type="file" id="programImportFile" accept=".txt,.json,.docx,.md" />
+              <button class="btn btn-secondary" id="previewProgramBtn">Vista previa</button>
+              <button class="btn btn-primary" id="saveImportedProgramBtn">Guardar rutina</button>
+            </div>
+            <div class="divider"></div>
+            <div id="importPreviewBox" class="preview-box empty">Sin vista previa todavía.</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-progress">
+        <div class="grid two-col">
+          <article class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">PESO</p>
+                <h2>Peso corporal</h2>
+              </div>
+            </div>
+            <div class="grid compact-grid">
+              <label class="field">
+                <span>Fecha</span>
+                <input type="date" id="weightDateInput" />
+              </label>
+              <label class="field">
+                <span>Peso (kg)</span>
+                <input type="number" step="0.1" id="weightValueInput" placeholder="84.0" />
+              </label>
+            </div>
+            <label class="field full">
+              <span>Nota</span>
+              <input type="text" id="weightNoteInput" placeholder="Ayunas, después de comer, etc." />
+            </label>
+            <div class="hero-actions mobile-stack">
+              <button class="btn btn-primary" id="saveWeightBtn">Guardar peso</button>
+            </div>
+            <div class="divider"></div>
+            <div id="weightList" class="stack empty">Sin registros de peso.</div>
+          </article>
+
+          <article class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">EJERCICIOS</p>
+                <h2>Historial por ejercicio</h2>
+              </div>
+            </div>
+            <label class="field full">
+              <span>Buscar ejercicio</span>
+              <input type="text" id="exerciseSearchInput" placeholder="Press banca, jalón, zancadas..." />
+            </label>
+            <div id="exerciseHistoryBox" class="preview-box empty">Busca un ejercicio para ver últimas marcas, volumen y sesiones.</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-reports">
+        <div class="grid two-col reports-grid">
+          <article class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">REPORTE SEMANAL</p>
+                <h2>Formulario</h2>
+              </div>
+              <span class="badge" id="reportModeBadge">NUEVO</span>
+            </div>
+            <div class="grid compact-grid">
+              <label class="field">
+                <span>Fecha</span>
+                <input type="date" id="reportDateInput" />
+              </label>
+              <label class="field">
+                <span>Peso actual</span>
+                <input type="number" step="0.1" id="reportWeightCurrentInput" />
+              </label>
+              <label class="field">
+                <span>Peso semana pasada</span>
+                <input type="number" step="0.1" id="reportWeightPreviousInput" />
+              </label>
+              <label class="field">
+                <span>Diferencia</span>
+                <input type="text" id="reportWeightDifferenceInput" readonly />
+              </label>
+            </div>
+            <h3 class="subsection">Sensaciones entrenamiento</h3>
+            <div class="grid compact-grid">
+              <label class="field"><span>Fuerza</span><input type="text" id="reportStrengthInput" /></label>
+              <label class="field"><span>Congestión</span><input type="text" id="reportCongestionInput" /></label>
+              <label class="field"><span>Recuperación</span><input type="text" id="reportRecoveryInput" /></label>
+            </div>
+            <h3 class="subsection">Descanso</h3>
+            <div class="grid compact-grid">
+              <label class="field"><span>Horas dormidas</span><input type="text" id="reportSleepHoursInput" /></label>
+              <label class="field full"><span>Estrés / recuperación diaria</span><textarea rows="3" id="reportSleepRecoveryInput"></textarea></label>
+            </div>
+            <h3 class="subsection">Cardio y entreno</h3>
+            <div class="grid compact-grid">
+              <label class="field"><span>Sesiones cardio</span><input type="text" id="reportCardioSessionsInput" /></label>
+              <label class="field"><span>Duración</span><input type="text" id="reportCardioDurationInput" /></label>
+              <label class="field full"><span>Momento del día</span><input type="text" id="reportCardioMomentInput" /></label>
+              <label class="field"><span>Sesiones entreno</span><input type="text" id="reportTrainingSessionsInput" /></label>
+              <label class="field"><span>Semana del sistema</span><input type="text" id="reportTrainingWeekInput" /></label>
+            </div>
+            <h3 class="subsection">Alimentación</h3>
+            <div class="grid compact-grid">
+              <label class="field"><span>Cumplimiento</span><input type="text" id="reportDietComplianceInput" /></label>
+              <label class="field"><span>Nivel apetito</span><input type="text" id="reportAppetiteInput" /></label>
+              <label class="field full"><span>Alimentos a cambiar</span><textarea rows="3" id="reportFoodsToChangeInput"></textarea></label>
+              <label class="field full"><span>Digestiones</span><textarea rows="3" id="reportDigestionsInput"></textarea></label>
+            </div>
+            <h3 class="subsection">Otros</h3>
+            <div class="grid compact-grid">
+              <label class="field"><span>Semana terapia</span><input type="text" id="reportTherapyWeekInput" /></label>
+              <label class="field"><span>Semana TPC</span><input type="text" id="reportTpcWeekInput" /></label>
+              <label class="field"><span>Poses reglamentarias</span><input type="text" id="reportPosesStatusInput" /></label>
+              <label class="field"><span>Fase menstrual</span><input type="text" id="reportMenstrualPhaseInput" /></label>
+              <label class="field full"><span>Notas</span><textarea rows="3" id="reportGeneralNotesInput"></textarea></label>
+            </div>
+            <div class="hero-actions mobile-stack">
+              <button class="btn btn-secondary" id="duplicateReportBtn">Duplicar último</button>
+              <button class="btn btn-secondary" id="autofillReportBtn">Autorrellenar</button>
+              <button class="btn btn-primary" id="saveReportBtn">Guardar reporte</button>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">HISTORIAL</p>
+                <h2>Reportes guardados</h2>
+              </div>
+              <span class="badge" id="reportCountBadge">0</span>
+            </div>
+            <div id="reportList" class="stack empty">Sin reportes guardados.</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="grid two-col">
+          <article class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">CUENTA Y BACKEND</p>
+                <h2>Firebase / modo demo</h2>
+              </div>
+              <span class="badge" id="accountModeBadge">DEMO</span>
+            </div>
+            <div id="authLoggedOutBox" class="stack">
+              <label class="field full"><span>Email</span><input type="email" id="authEmailInput" placeholder="tuemail@gmail.com" autocomplete="username" /></label>
+              <label class="field full"><span>Contraseña</span><input type="password" id="authPasswordInput" placeholder="********" autocomplete="current-password" /></label>
+              <div class="hero-actions mobile-stack">
+                <button class="btn btn-primary" id="signInBtn">Entrar</button>
+                <button class="btn btn-secondary" id="signUpBtn">Crear cuenta</button>
+              </div>
+            </div>
+            <div id="authLoggedInBox" class="hidden">
+              <div class="user-box">
+                <div class="user-avatar" id="userAvatar">A</div>
+                <div>
+                  <strong id="userNameText">Usuario</strong>
+                  <p class="muted" id="userEmailText">—</p>
+                </div>
+              </div>
+              <div class="hero-actions mobile-stack">
+                <button class="btn btn-secondary" id="seedCloudBtn">Subir datos locales a nube</button>
+                <button class="btn btn-secondary" id="signOutBtn">Cerrar sesión</button>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="mini-grid">
+              <div>
+                <span class="label">Estado sync</span>
+                <strong id="syncStatusText">Modo demo local</strong>
+              </div>
+              <div>
+                <span class="label">Última sync</span>
+                <strong id="syncLastText">—</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">AJUSTES</p>
+                <h2>Preferencias</h2>
+              </div>
+            </div>
+            <div class="grid compact-grid">
+              <label class="field"><span>Descanso por defecto (s)</span><input type="number" id="settingsRestSecondsInput" min="15" step="5" /></label>
+              <label class="field"><span>Semana visible</span><input type="number" id="settingsCurrentWeekInput" min="1" step="1" /></label>
+            </div>
+            <div class="toggle-group spaced">
+              <label class="switch"><input type="checkbox" id="settingsSoundEnabledInput" /><span>Sonido timer</span></label>
+              <label class="switch"><input type="checkbox" id="settingsKeepAwakeInput" /><span>Intentar mantener pantalla activa</span></label>
+            </div>
+            <div class="hero-actions mobile-stack">
+              <button class="btn btn-primary" id="saveSettingsBtn">Guardar ajustes</button>
+              <button class="btn btn-secondary" id="installPwaBtn">Instalar app</button>
+            </div>
+            <div class="divider"></div>
+            <div class="hero-actions mobile-stack">
+              <button class="btn btn-secondary" id="exportBackupBtn">Exportar backup</button>
+              <label class="btn btn-secondary file-btn">
+                Importar backup
+                <input type="file" id="importBackupInput" accept=".json" />
+              </label>
+              <button class="btn btn-danger" id="resetDemoBtn">Reset demo</button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" id="bottomNav">
+      <button class="nav-btn active" data-view="home">Inicio</button>
+      <button class="nav-btn" data-view="workout">Entreno</button>
+      <button class="nav-btn" data-view="programs">Rutinas</button>
+      <button class="nav-btn" data-view="progress">Progreso</button>
+      <button class="nav-btn" data-view="reports">Reportes</button>
+      <button class="nav-btn" data-view="settings">Ajustes</button>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
